@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "StringConexaoSQLServer": "Server=localhost;Database=db_Receitas;Trusted_Connection=True;"
+  }
+}

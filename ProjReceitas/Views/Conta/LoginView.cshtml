@@ -1,0 +1,47 @@
+﻿<head>
+    <link rel="stylesheet" href="/css/identificacao.css"/>
+    <title>Logar</title>
+</head>
+
+@model ProjReceitas.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Entrar no Sistema";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="centro">
+    <h1 class="eft-h1">LOGIN</h1>
+    <hr class="eft-hr">
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert" style="@(ViewData.ModelState.IsValid ? "display:none;" : "")"></div>
+
+    @if (TempData["MsgSucesso"] != null)
+    {
+        <div class="alert alert-success">@TempData["MsgSucesso"]</div>
+    }
+    @if (TempData["MsgErro"] != null)
+    {
+        <div class="alert alert-danger">@TempData["MsgErro"]</div>
+    }
+
+    <form asp-controller="Conta" asp-action="LoginProcessar" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="login">
+        @Html.AntiForgeryToken()
+                        
+        <h2>NOME</h2>
+        <input asp-for="NomeUsuario" class="input" placeholder="Nome de Usuário" />
+        <span asp-validation-for="NomeUsuario" ></span>
+                        
+        <h2>SENHA</h2>
+        <input asp-for="Senha" type="password" class="input" placeholder="Senha" />
+        <span asp-validation-for="Senha" class="aviso"></span>
+
+        <p class="no-account">NÃO POSSUI CONTA? <a asp-controller="Conta" asp-action="Cadastro">CLIQUE AQUI</a></p>
+
+        <div class="container-btn"><button type="submit" class="login-btn">Entrar</button></div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

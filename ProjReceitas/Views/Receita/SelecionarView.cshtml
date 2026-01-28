@@ -1,0 +1,139 @@
+﻿<head>
+    <link rel="stylesheet" href="/css/home.css" />
+    <title>Home</title>
+</head>
+
+@using System.Data
+@model DataTable
+
+@{
+    ViewData["Title"] = "Nossas Receitas";
+    var receitasDestaque = ViewBag.ReceitasDestaque as DataTable;
+    var opcoesDeFiltro = ViewBag.OpcoesDeFiltro as SelectList;
+}
+
+@if (TempData["MsgSucesso"] != null)
+{
+    <div role="alert">
+        @TempData["MsgSucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+    </div>
+}
+
+@if (TempData["MsgErro"] != null)
+{
+    <div role="alert">
+        @TempData["MsgErro"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+    </div>
+}
+
+
+
+
+<main class="home">
+    <h1>Novidade</h1>
+    <hr>
+    <h2 class="vermelho">Sabor Extremo</h2>
+
+    <section class="Inicial">
+        <div class="seta direita" onclick="setaEsquerda()"></div>
+        <div class="container">
+            <nav>
+                <h2 class="destaque" >Receitas em Destaque</h2>
+
+            </nav>
+            <div class="imagens">
+                <div class="navegacao">
+
+                    @if (Model != null && Model.Rows.Count > 0)
+                    {
+                        @foreach (DataRow rowDestaque in receitasDestaque.Rows)
+                        {
+                            var idDestaque = rowDestaque.Field<int>("Id_Receita");
+                            var nomeDestaque = rowDestaque.Field<string>("Nome");
+                            <div class="card">
+                                <a asp-controller="Receita" asp-action="Detalhes" asp-route-idReceita="@idDestaque">
+                                    <img src="@Url.Action("GetImagemReceita", "Receita", new { id = idDestaque })"
+                                 alt="Foto de @nomeDestaque">
+                                </a>
+                                <p class="nome-prato">@nomeDestaque</p>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="seta esquerda" onclick="setaDireita()"></div>
+    </section>
+
+    <section class="filtrar">
+        <form asp-controller="Receita" asp-action="Selecionar" method="get" >
+            <label for="tipoFiltro" class="title-sec2">Filtrar por Tipo:</label>
+            <select name="tipoFiltro" id="tipoFiltro" class="selecao" asp-items="opcoesDeFiltro">
+            </select>
+
+            <button type="submit" class="search-btn" href="#title-receitas">Filtrar</button>
+        </form>
+    </section>
+      
+
+    <section id="receitas">
+        <h2 id="title-receitas">Todas Receitas</h2>
+
+        <div class="box-receitas">
+            @if (Model != null && Model.Rows.Count > 0)
+            {
+                foreach (DataRow row in Model.Rows)
+                {
+                    var idReceita = row.Field<int>("Id_Receita"); 
+                    var nomeReceita = row.Field<string>("Nome");
+                    var tempoPreparo = row.Field<int?>("Temp_Preparo");
+
+                    <div class="bloco">
+                        <a asp-controller="Receita" asp-action="Detalhes" asp-route-idReceita="@idReceita">
+                            <img src="@Url.Action("GetImagemReceita", "Receita", new { id = idReceita })"
+                         class="img-receitas"
+                         alt="Foto de @nomeReceita"
+                         onerror="this.onerror=null" ; this.src="/imagens/comida.jfif"> 
+                        </a>
+                        <p class="nome-prato">@nomeReceita</p>
+
+                        <a class="btn-ver" asp-controller="Receita" asp-action="Detalhes" asp-route-idReceita="@idReceita">Ver mais</a>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="alert alert-info text-center" role="alert">
+                        Nenhuma receita encontrada com os filtros aplicados. Tente outros critérios ou <a asp-action="InserirExibir" class="alert-link">adicione uma nova receita</a>!
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <section>
+        <div class="tudo">
+            <div class="content">
+
+                <div class="left">
+                    <h1 class="title-sec2">O que tem em casa?</h1>
+                    <p>Basta indicar dois ou três ingredientes<br>para a gente te ajudar a fazer uma bela receita.</p>
+                    <label>Indique até 3 ingredientes:</label>
+
+                    <div class="input-area">
+                        <input type="text" placeholder="Ingrediente/Produto">
+                        <button>+</button>
+                    </div>
+
+                    <button class="search-btn">Buscar receitas</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script src="~/js/site.js"></script>
+</main>

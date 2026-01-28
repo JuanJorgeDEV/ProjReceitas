@@ -1,0 +1,136 @@
+﻿@model ProjReceitas.Models.ReceitaViewModel
+@{
+    ViewData["Title"] = $"Alterar Receita: {Model.Nome}";
+}
+<head>
+    <link rel="stylesheet" href="/css/novaReceita.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <title>@ViewData["Title"]</title>
+  
+</head>
+
+@if (TempData["MsgErro"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["MsgErro"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["MsgSucesso"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["MsgSucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Ops!</strong> Por favor, corrija os erros abaixo:
+        <div asp-validation-summary="ModelOnly" class="mt-2"></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+<h1>ALTERAR RECEITA</h1>
+<hr>
+<h2>Editando: @Model.Nome</h2>   
+
+<main class="container" >
+    <div style="max-width: 60%">
+    <form asp-controller="Receita" asp-action="AlterarProcessar" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id_Receita" />
+
+        <div class="left">
+            <label asp-for="Nome"></label>
+            <input asp-for="Nome" placeholder="Ex: Bolo de Chocolate" />
+            <span asp-validation-for="Nome" class="text-danger"></span>
+
+            <label asp-for="Temp_Preparo"></label>
+            <div>
+                <input asp-for="Temp_Preparo" type="number" class="tempo-preparo" placeholder="Ex: 60" /><span class="input-group-text">minutos</span>
+            </div>
+            <span asp-validation-for="Temp_Preparo" class="text-danger"></span>
+
+            <label asp-for="Tipo"></label>
+            <select asp-for="Tipo" class="tipo">
+                <option value="">-- Selecione um Tipo --</option>
+                <option value="Entrada">Entrada</option>
+                <option value="Prato Principal">Prato Principal</option>
+                <option value="Sobremesa">Sobremesa</option>
+               
+            </select>
+            <span asp-validation-for="Tipo" class="text-danger"></span>
+
+            <label asp-for="Preco"></label>
+            <div>
+                <span class="input-group-text">R$</span>
+                <input asp-for="Preco" type="number" step="0.01" class="valor" placeholder="0,00" />
+            </div>
+            <span asp-validation-for="Preco" class="text-danger"></span>
+
+            <div class="imagem-atual-container">
+                <label class="form-label">FOTO ATUAL DA RECEITA</label>
+                @if (Model.Id_Receita > 0) 
+                {
+                    <img id="imagemAtual" src="@Url.Action("GetImagemReceita", "Receita", new { id = Model.Id_Receita })"
+                         alt="Foto atual de @Model.Nome"
+                         onerror="this.style.display='none'; document.getElementById('semImagemMsg').style.display='block';" />
+                    <small id="semImagemMsg" style="display:none; color: #6c757d;">Não há imagem cadastrada ou ocorreu um erro ao carregá-la.</small>
+                }
+            </div>
+            
+            <div>
+                <label asp-for="ImagemArquivo" class="form-label">ALTERAR FOTO (Opcional)</label>
+                <input asp-for="ImagemArquivo" type="file" class="form-control" accept="image/png, image/jpeg, image/gif" />
+                <div id="imageHelp" class="form-text">Selecione uma nova imagem apenas se desejar substituí-la (PNG, JPG, GIF).</div>
+                <span asp-validation-for="ImagemArquivo" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="right">
+            <label asp-for="Descricao" class="form-label"></label>
+            <textarea asp-for="Descricao" class="form-control" rows="4" placeholder="Descreva brevemente a receita..."></textarea>
+            <span asp-validation-for="Descricao" class="text-danger"></span>
+
+            <label asp-for="ModoPreparo" class="form-label"></label>
+            <textarea asp-for="ModoPreparo" class="form-control" rows="5" placeholder="Descreva o passo a passo do preparo..."></textarea>
+            <span asp-validation-for="ModoPreparo" class="text-danger"></span>
+
+            <div style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Salvar Alterações
+                </button>
+                <a asp-controller="Receita" asp-action="Detalhes" asp-route-idReceita="@Model.Id_Receita" class="btn btn-outline-secondary"> 
+                    <i class="fas fa-times-circle"></i> Cancelar
+                </a>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; margin-bottom: 20px ">
+                <h4>Modificar Ingredientes</h4>
+                <p>Se precisar, você pode alterar os ingredientes desta receita.</p>
+                <a asp-action="GerenciarIngredientes" asp-controller="Receita" asp-route-idReceita="@Model.Id_Receita" class="btn btn-info">
+                    <i class="fas fa-carrot " style="margin-top: 30px"></i> Ir para Gerenciar Ingredientes
+                </a>
+            </div>
+        </div>
+    </form>
+
+    <div>
+        <div>
+            <h4>Dicas para Editar:</h4>
+            <p>Verifique se todas as informações estão corretas e atualizadas.</p>
+            <p>Se mudar a foto, escolha uma que represente bem a receita!</p>
+            <p>O modo de preparo deve ser claro e fácil de seguir.</p>
+        </div>
+    </div>
+    </div>
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

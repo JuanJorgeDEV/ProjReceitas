@@ -1,0 +1,179 @@
+﻿<head>
+    <link rel="stylesheet" href="/css/receita.css" />
+    <title>Detalhes da Receita</title>
+</head>
+@model ProjReceitas.Models.DetalhesReceitaViewModel
+@using System.Security.Claims
+@{
+    ViewData["Title"] = Model.NomeReceita;
+}
+<main>
+
+    <h1>@Model.NomeReceita</h1>
+    <div class="acoes-receita">
+        <a asp-action="AlterarExibir" asp-controller="Receita" asp-route-idReceita="@Model.IdReceita" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-edit"></i> Editar
+        </a>
+        <form asp-action="ExcluirProcessar" asp-controller="Receita" method="post" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir esta receita: \'@Model.NomeReceita\'? Esta ação é irreversível.');">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="idReceita" value="@Model.IdReceita" />
+            <button type="submit" class="vermelho"> <i class="fas fa-trash-alt"></i> Excluir </button>
+        </form>
+    </div>
+
+    @if (TempData["MsgErro"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["MsgErro"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["MsgSucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["MsgSucesso"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <section class="superior">
+        <div class="dados">
+            <h3>Publicado por: @Model.AutorReceita</h3>
+            <p><i class="fas fa-dollar-sign"></i> Preço médio total: @Model.PrecoMedio</p>
+            <p><i class="far fa-clock"></i>Tempo médio de preparo: @Model.TempoPreparo</p>
+            <p><strong><i class="fas fa-utensils"></i> Tipo:</strong> @(Model.Tipo ?? "N/A")</p>
+
+            <h4>Aprovação Média</h4>
+            <div class="avaliacao">
+                <div class="porcentagem">
+                    @if (Model.TotalAvaliacoes > 0)
+                    {
+                        <h2 class="p">@Model.MediaAvaliacoes.ToString("0.0") <i class="fas fa-star"></i></h2>
+                        <small class="text-muted">(@Model.TotalAvaliacoes avaliações)</small>
+                    }
+                    else
+                    {
+                        <p class="p">Ainda não avaliada</p>
+                    }
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="card">
+            <img src="@Url.Action("GetImagemReceita", "Receita", new { id = Model.IdReceita })"
+                 class="img-fluid rounded shadow-sm"
+                 alt="Foto de @Model.NomeReceita"
+                 onerror="this.onerror=null; this.src='/images/placeholder-receita.png';">
+            <p>@Model.NomeReceita</p>
+        </div>
+
+        <div class="descri">
+            <h5>Descrição</h5>
+            <p>@Html.Raw(Model.Descricao?.Replace("\n", "<p>Sem descrição</p>"))</p>
+        </div>
+    </section>
+
+    <section class="infos-receita">
+        <div class="ingredientes">
+            <h4><i class="fas fa-carrot"></i> Ingredientes</h4>
+            @if (Model.IngredientesDaReceita != null && Model.IngredientesDaReceita.Any())
+            {
+                <ul class="list-group list-group-flush">
+                    @foreach (var item in Model.IngredientesDaReceita)
+                    {
+                        <li class="list-group-item">@item.Quantidade @item.NomeIngrediente</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Ingredientes não informados.</p>
+            }
+        </div>
+        <div class="modo-preparo">
+            <h4><i class="fas fa-shoe-prints"></i> Modo de Preparo</h4>
+            @if (!string.IsNullOrWhiteSpace(Model.ModoPreparo))
+            {
+                <p>@Html.Raw(Model.ModoPreparo.Replace("\n", "<br />"))</p>
+            }
+            else
+            {
+                <p>Modo de preparo não informado.</p>
+            }
+        </div>
+    </section>
+
+    <section class="comentarios">
+        <h3><i class="fas fa-comments"></i> Comentários (@Model.TotalAvaliacoes)</h3>
+
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="alertar">Deixe seu comentário e avaliação</div>
+     
+
+            <form asp-controller="Receita" asp-action="AdicionarComentario" method="post" class="comentar">
+                @Html.AntiForgeryToken()
+
+                <h3>Criar Comentário</h3>
+
+                <input type="hidden" name="IdReceita" value="@Model.NovoComentario.IdReceita" class="input" />
+
+                <label for="TextoComentario" class="form-label">Seu Comentário</label>
+                <textarea name="TextoComentario" id="TextoComentario" class="form-control" rows="3">@Model.NovoComentario?.TextoComentario</textarea>
+                @Html.ValidationMessage("Texto_Comentario", "", new { @class = "text-danger" })
+
+                <label for="Nota" class="form-label">Sua Nota (1-5)</label>
+                <select name="Nota" id="Nota" class="form-select" style="width: auto;">
+                    <option value="">Selecione...</option>
+                    <option value="1" selected="@(Model.NovoComentario?.Nota == 1)">1 Estrela (Ruim)</option>
+                    <option value="2" selected="@(Model.NovoComentario?.Nota == 2)">2 Estrelas (Razoável)</option>
+                    <option value="3" selected="@(Model.NovoComentario?.Nota == 3)">3 Estrelas (Bom)</option>
+                    <option value="4" selected="@(Model.NovoComentario?.Nota == 4)">4 Estrelas (Muito Bom)</option>
+                    <option value="5" selected="@(Model.NovoComentario?.Nota == 5)">5 Estrelas (Excelente!)</option>
+                </select>
+                @Html.ValidationMessage("nota", "", new { @class = "text-danger" })
+
+                <button type="submit" class="enviar">Enviar Comentário</button>
+            </form>
+        }
+        else
+        {
+            <div class="alertar">
+                <a asp-controller="Conta" asp-action="Login" asp-route-returnUrl="@Context.Request.Path">Faça login</a> para comentar e avaliar esta receita.
+            </div>
+        }
+
+        @* Lista de Comentários Existentes *@
+        <section class="exibir-comentarios">
+            @if (Model.Comentarios != null && Model.Comentarios.Any())
+            {
+
+                foreach (var comentario in Model.Comentarios)
+                {
+                    <div class="comentario">
+                        <h6>
+                            @comentario.NomeUsuario - Nota: @comentario.Nota/5
+                            <span class="ms-2">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="fa@(i <= comentario.Nota ? "s" : "r") fa-star text-warning"></i>
+                                }
+                            </span>
+                        </h6>
+                        <small>@comentario.DataPostagemFormatada</small>
+                        <p class="card-text mt-2">@Html.Raw(comentario.TextoComentario?.Replace("\n", "<br />"))</p>
+                    </div>
+                }
+
+            }
+            else
+            {
+                <p>Ainda não há comentários para esta receita. Seja o primeiro a comentar!</p>
+            }
+        </section>
+    </section>
+</main>
+<script src="~/js/receita.js"></script>

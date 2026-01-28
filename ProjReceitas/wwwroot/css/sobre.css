@@ -1,0 +1,39 @@
+﻿.sobre {
+    width: 800px;
+    height: 375px;
+    margin-top: 60px;
+    border-radius: 30px;
+    padding: 50px;
+    display: flex;
+    background-color: #111111;
+    box-shadow: 0px 0px 10px 3px black;
+    justify-content: center;
+    gap: 40px;
+}
+
+.sobre img {
+    height: 350px;
+    width: 350px;
+}
+
+.sobre aside {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+
+.sobre aside h4 {
+    font-size: 40px;
+    margin-top: 40px;
+    margin-right: 40px;
+}
+
+.sobre aside p {
+    width: 300px;
+    font-size: 15px;
+    text-align: justify;
+    margin-top: 40px;
+    margin-right: 40px;
+    text-indent: 10px;
+}

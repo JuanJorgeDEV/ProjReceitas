@@ -1,0 +1,44 @@
+﻿@model ProjReceitas.Models.IngredienteViewModel
+
+@{
+    ViewData["Title"] = "Inserir Ingrediente";
+
+}
+
+<div class="text-center">
+    <h1 class="display-4">Cadastrar Ingrediente</h1> 
+</div>
+
+<form asp-controller="Ingrediente" asp-action="InserirProcessar" method="post">
+
+   
+    <div class="row gx-5 gy-3">
+
+        <div class="col-md-6">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="nome"
+                   placeholder="Digite o nome do ingrediente." asp-for="Nome"> 
+            <span asp-validation-for="Nome" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label for="preco" class="form-label">Preço</label>
+            <input type="text" class="form-control" id="preco"
+                   placeholder="Digite o preço por unidade. Ex: 5,99" asp-for="preco"> 
+            <span asp-validation-for="preco" class="text-danger"></span>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Inserir</button>
+        <a class="btn btn-secondary" role="button" asp-controller="Ingrediente" asp-action="Selecionar">Voltar</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

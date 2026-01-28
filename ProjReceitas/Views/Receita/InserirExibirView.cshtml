@@ -1,0 +1,105 @@
+﻿<head>
+    <link rel="stylesheet" href="/css/novaReceita.css"/>
+    <title>Cadastrar Receita</title>
+</head>
+
+@model ProjReceitas.Models.ReceitaViewModel
+
+@{
+    ViewData["Title"] = "Nova Receita";
+}
+
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Ops!</strong> Por favor, corrija os erros abaixo:
+        <div asp-validation-summary="ModelOnly" class="mt-2"></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["MsgErro"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["MsgErro"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h1>Novidade</h1>
+<hr>
+<h2>Sabor Extremo</h2>   
+
+<main class="container">
+    <form asp-controller="Receita" asp-action="InserirProcessar" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <div class="left">
+            <label asp-for="Nome"></label>
+            <input asp-for="Nome" placeholder="Ex: Bolo de Chocolate" />
+            <span asp-validation-for="Nome" class="text-danger"></span>
+
+            <label asp-for="Temp_Preparo"></label>
+            <div>
+                <input asp-for="Temp_Preparo" type="number" class="tempo-preparo" placeholder="Ex: 60" /><span class="input-group-text">minutos</span>
+            </div>
+            <span asp-validation-for="Temp_Preparo" class="text-danger"></span>
+
+            <label asp-for="Tipo"></label>
+            <select asp-for="Tipo" class="tipo">
+                <option value="">-- Selecione um Tipo --</option>
+                <option value="Entrada">Entrada</option>
+                <option value="Prato Principal">Prato Principal</option>
+                <option value="Sobremesa">Sobremesa</option>
+            </select>
+            <span asp-validation-for="Tipo" class="text-danger"></span>
+
+            <label asp-for="Preco"></label>
+            <div>
+                <span class="input-group-text">R$</span>
+                <input asp-for="Preco" type="number" step="0.01" class="valor" placeholder="0,00" />
+            </div>
+            <span asp-validation-for="Preco" class="text-danger"></span>
+
+        <div>
+            <label asp-for="ImagemArquivo" class="form-label">Foto da Receita</label>
+            <input asp-for="ImagemArquivo" required type="file" class="form-control" accept="image/png, image/jpeg, image/gif" />
+            <div id="imageHelp" class="form-text">Selecione uma imagem para a sua receita (PNG, JPG, GIF).</div>
+            <span asp-validation-for="ImagemArquivo" class="text-danger"></span>
+        </div>
+
+        </div>
+
+        <div class="right">
+            <label asp-for="Descricao" class="form-label"></label>
+            <textarea asp-for="Descricao" class="form-control" rows="4" placeholder="Descreva brevemente a receita..."></textarea>
+            <span asp-validation-for="Descricao" class="text-danger"></span>
+
+            <label asp-for="ModoPreparo" class="form-label"></label>
+            <textarea asp-for="ModoPreparo" class="form-control" rows="5" placeholder="Descreva o passo a passo do preparo..."></textarea>
+            <span asp-validation-for="ModoPreparo" class="text-danger"></span>
+
+            <div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Salvar e Adicionar Ingredientes
+                </button>
+                <a asp-controller="Receita" asp-action="Selecionar" class="btn btn-outline-secondary"> <i class="fas fa-times"></i>Cancelar</a>
+            </div>
+        </div>
+    </form>
+
+        <div>
+            <div>
+                <h4>Dicas:</h4>
+                <p>Capriche na descrição!</p>
+                <p>Uma boa foto aumenta o interesse pela sua receita.</p>
+                <p>O preço é uma estimativa do custo total da receita.</p>
+            </div>
+        </div>
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

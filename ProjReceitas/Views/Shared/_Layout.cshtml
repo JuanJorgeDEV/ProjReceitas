@@ -1,0 +1,137 @@
+﻿@* Adicione este using no topo se ainda não estiver lá, para ter acesso a User.Identity *@
+@using System.Security.Claims
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale-1.0" />
+    <title>@ViewData["Title"] - ProjReceitas</title>
+    <link rel="shortcut icon" href="/imagens/Logo Red.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/padrao.css" />
+</head>
+
+<header>
+    <input type="checkbox" name="" id="chk1">
+
+    <img class="logoo" src="~/imagens/Logo Red.png" alt="logo do Red">
+    <ul >
+        <li><a asp-controller="Receita" asp-action="Selecionar">Home</a></li>
+        <li><a asp-controller="Receita" asp-action="SobreExibir">Sobre-Nós</a></li>
+        <li><a asp-area="" asp-controller="Receita" asp-action="InserirExibir">Criar Receita</a></li>
+
+        @if (User.Identity.IsAuthenticated) // Mostra "Criar Receita" apenas se logado
+        {
+
+            <li class="icones logado">
+                <i class="fas fa-user"></i> Olá, @User.Identity.Name!
+                <form asp-controller="Conta" asp-action="LogoutProcessar" method="post" id="logoutForm" class="form-inline">
+                    @Html.AntiForgeryToken()
+                    <button class = "btnSair" type="submit">Sair</button>
+                </form>
+            </li>
+
+        }
+        else
+        {
+            <li class="icones">
+                <a asp-controller="Conta" asp-action="Cadastro" class="cad">
+                    <i class="fas fa-user-plus"></i> Cadastre-se
+                </a>
+                <a asp-controller="Receita" asp-action="InserirExibir" class="cad">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </a>
+            </li>
+        }
+    </ul>
+
+    <div class="menu">
+        <label for="chk1">
+            <i class="fa fa-bars"></i>
+        </label>
+    </div>
+</header>
+
+
+
+@RenderBody()
+
+<footer class="border-top footer text-muted">
+    <div id="footer_content">
+        <div id="footer_contacts" class="eft-txtprod">
+            <h4>ReDelicias</h4>
+            <p style="margin-top: 10px;">Site de Receitas</p>
+
+            <div id="footer_social_media">
+                <a href="#" class="footer-link" id="instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+
+                <a href="#" class="footer-link" id="linkedin">
+                    <i class="fa-brands fa-linkedin"></i>
+                </a>
+
+                <a href="https://api.whatsapp.com/send?phone=5516994030669" class="footer-link" id="whatsapp">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </a>
+            </div>
+        </div>
+
+        <ul class="footer-list eft-txtprod">
+            <li>
+                <h3>Mais Informaçoes</h3>
+            </li>
+            <li>
+                <a href="#" class="footer-link">Politica de Privacidade</a>
+            </li>
+
+            <li>
+                <a href="#" class="footer-link">Contato</a>
+            </li>
+        </ul>
+
+        <ul class="footer-list eft-txtprod">
+            <li>
+                <h3>Produtos</h3>
+            </li>
+            <li>
+                <a href="#" class="footer-link">Catalogo</a>
+            </li>
+            <li>
+                <a href="#" class="footer-link">Home</a>
+            </li>
+            <li>
+                <a href="#" class="footer-link">Avaliaçoes</a>
+            </li>
+        </ul>
+
+        <div id="footer_subscribe" class="eft-txtprod">
+            <h3>Inscreva-se</h3>
+
+            <p>
+                Digite seu e-mail para ser notificado sobre nossas novidades
+            </p>
+
+            <div id="input_group">
+                <input type="email" id="email" placeholder="Digite seu Email">
+                <button>
+                    <i class="fa-regular fa-envelope"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer_copyright">
+        &#169
+        2025 Todos os direitos reservados
+    </div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+
+</html>

@@ -1,0 +1,51 @@
+﻿<head>
+    <link rel="stylesheet" href="/css/identificacao.css"/>
+    <title>Cadastrar</title>
+</head>
+
+@model ProjReceitas.Models.CadastroViewModel
+
+@{
+    ViewData["Title"] = "Crie sua Conta";
+}
+
+@if (TempData["MsgErro"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["MsgErro"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="centro">
+    <h1 class="eft-h1">CADASTRO</h1>
+    <hr class="eft-hr">
+                    
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert" style="@(ViewData.ModelState.IsValid ? "display:none;" : "")">
+        Por favor, corrija os erros indicados e tente novamente.
+     </div>
+
+     <form asp-controller="Conta" asp-action="CadastroProcessar" method="post" class="login">
+        @Html.AntiForgeryToken() 
+        
+        <h2>NOME</h2>
+        <input asp-for="NomeUsuario" class="input" placeholder="Nome de Usuário" />
+        <span asp-validation-for="NomeUsuario" class="aviso"></span>
+
+        <h2>SENHA</h2>
+        <input asp-for="Senha" type="password" class="input" placeholder="Crie uma Senha" />
+        <span asp-validation-for="Senha" class="aviso"></span>
+
+        <h2>SENHA</h2>
+        <input asp-for="ConfirmarSenha" type="password" class="input" placeholder="Confirme sua Senha" />
+        <span asp-validation-for="ConfirmarSenha" class="aviso"></span>
+
+        <p class="no-account">Já POSSUI CONTA? <a asp-controller="Receita" asp-action="InserirExibir">CLIQUE AQUI</a></p>
+
+        <div class="container-btn"><button type="submit" class="login-btn">Cadastrar</button></div>
+    </form>
+</div>      
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

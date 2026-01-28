@@ -1,0 +1,94 @@
+﻿<head>
+    <link rel="stylesheet" href="/css/addIngredientes.css"/>
+    <title>Cadastrar Receita</title>
+</head>
+
+@model ProjReceitas.Models.GerenciarIngredientesViewModel
+
+@{
+    ViewData["Title"] = $"Adicionar Ingredientes para: {Model.NomeReceita}";
+}
+
+@if (TempData["MsgSucesso"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert"> 
+        @TempData["MsgSucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+    </div>
+}
+@if (TempData["MsgErro"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["MsgErro"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">X</button>
+</div>
+}
+
+<main>
+    <h3>Adicionar Ingredientes</h3>    
+
+    <section>
+        <form asp-action="AdicionarIngredienteAReceita" asp-route-idReceita="@Model.IdReceita" method="post" class="adicionar-ingredientes">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="IdReceita" />
+
+            <h2>Novo Ingrediente</h2>
+
+            <label asp-for="NomeNovoIngrediente" class="form-label"></label>
+            <input asp-for="NomeNovoIngrediente" class="form-control" placeholder="Ex: Laranja" />
+            <span asp-validation-for="NomeNovoIngrediente" class="text-danger"></span>
+
+            <label asp-for="QuantidadeNovoIngrediente" class="form-label"></label>
+            <input asp-for="QuantidadeNovoIngrediente" class="form-control" placeholder="Ex: 2 unidades ou 250g" />
+            <span asp-validation-for="QuantidadeNovoIngrediente" class="text-danger"></span>
+
+            <p class="descricao">
+                <small>
+                    <strong>Como funciona:</strong> Digite o nome do ingrediente. Se ele já existir no nosso banco,
+                    nós o reutilizaremos. Caso contrário, um novo ingrediente será cadastrado e então adicionado à sua receita.
+                </small>
+            </p>
+
+            <button type="submit" class="botao">
+                <i class="fas fa-plus"></i> Adicionar à Receita
+            </button>
+        </form>
+
+        <aside class="exibir-ingredientes">
+            <h4>Ingredientes em "@Model.NomeReceita"</h4>
+            @if (Model.IngredientesAtuais != null && Model.IngredientesAtuais.Any())
+            {
+                <ul class="lista">
+                    @foreach (var item in Model.IngredientesAtuais)
+                    {
+                        <li class="ingrediente">
+                            <span><strong>@item.NomeIngrediente</strong> - @item.Quantidade</span>
+                            <form asp-action="RemoverIngredienteDaReceita" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="idReceitaIngrediente" value="@item.IdReceitaIngrediente" />
+                                <input type="hidden" name="idReceita" value="@Model.IdReceita" />
+                                <button type="submit" class="vermelho" title="Remover @item.NomeIngrediente"><i class="fas fa-trash-alt"></i></button>
+                            </form>
+                        </li>
+                    }
+                </ul>
+                }
+            else
+            {
+                <div class="alert alert-info" role="alert">Nenhum ingrediente adicionado a esta receita ainda.</div>
+            }
+
+            <div class="salvar">
+                <a asp-controller="Receita" asp-action="Selecionar" class="btn btn-success">
+                    <i class="fas fa-check-circle"></i> Concluir e Voltar para Lista de Receitas
+                </a>
+            </div>
+        </aside>
+    </section>
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

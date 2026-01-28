@@ -1,0 +1,227 @@
+﻿.container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 100px;
+    margin-left: 15%;
+}
+
+form{
+    display: flex;
+
+}
+
+.left, .right {
+    flex: 1;
+}
+
+label {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+input[type="text"], input[type="file"], textarea {
+    width: 400px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid white;
+    color: white;
+    padding: 8px 0;
+    font-size: 16px;
+    margin-bottom: 30px;
+    outline: none;
+}
+
+textarea {
+    height: 125px;
+    resize: none;
+    border: 2px solid white;
+    padding: 10px;
+    width: 500px;
+}
+
+select {
+    width: 300px;
+    color: white;
+    border: white solid 1px;
+    height: 40px;
+    margin-bottom: 30px;
+    font-size: 15px;
+}
+
+.btn {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 10px 30px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: 0.3s ease;
+    width: 300px;
+    height: 50px;
+}
+
+.btn:hover {
+    background-color: white;
+    color: black;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.file-upload-label svg {
+    width: 18px;
+    height: 18px;
+}
+
+.right {
+    margin-left: 180px;
+}
+
+
+.lado-esquerdo {
+    margin-left: 150px;
+}
+
+.container-btn {
+    display: flex;
+    justify-content: center;
+}
+
+.comentarios {
+    margin-top: 160px;
+}
+
+.containerCometns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 160px;
+}
+
+.box {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border: 1px solid white;
+    border-radius: 8%;
+    width: 350px;
+    height: 220px;
+    background-color: rgb(26, 26, 26);
+    cursor: pointer;
+    transition: all 0.4s;
+}
+
+.box:hover {
+    transform: translatey(-10px);
+    transition: all 0.4s;
+}
+
+.box p {
+    font-size: 16px;
+    margin-top: 40px;
+    background-color: rgb(26, 26, 26);
+    margin-bottom: -20px;
+}
+
+.box h4 {
+    font-size: 24px;
+    margin-top: 10px;
+    background-color: rgb(26, 26, 26);
+    margin-bottom: -20px;
+}
+
+.date {
+    color: #b8b8b8;
+}
+
+.title-coments {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 35pt;
+    font-weight: 600;
+}
+
+.tempo-preparo{
+    background-color: transparent;
+    outline: none;
+    height: 35px;
+    width: 200px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid white;
+    margin-right: 10px;
+    margin-bottom: 30px;
+}
+
+.tipo {
+    background-color: #1d1c1c;
+}
+
+.valor{
+    border: none;
+    border-bottom: 2px solid white;
+    margin-bottom: 30px;
+    background-color: transparent;
+    height: 35px;
+    width: 200px;
+    outline: none;
+}
+.imagem-atual-container {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px dashed #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+
+    .imagem-atual-container img {
+        max-width: 100%;
+        max-height: 500px;
+        display: block;
+        margin: 0 auto 10px auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .imagem-atual-container .form-label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+.container > div > div:last-child {
+    margin-top: 30px;
+}
+
+input[type="file"] + .text-danger {
+    display: block;
+    margin-top: 5px;
+}
+
+.input-group-text-preco {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    margin-bottom: 15px;
+}
+
+    .input-group-text-preco .input-group-text {
+        background-color: #e9ecef;
+        border-right: none;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .input-group-text-preco .valor {
+        border-left: none;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
